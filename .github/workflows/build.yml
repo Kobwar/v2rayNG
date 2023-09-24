@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       XRAY_CORE_VERSION:
-        description: 'xray commit hash'
+        description: 'xray version or commit hash'
         required: true
+
+      V2RAYNG_VERSION:
+          description: 'v2rayNG version'
+          required: true
 
 jobs:
   build:
@@ -46,14 +50,26 @@ jobs:
         cp *.aar ${{ github.workspace }}/V2rayNG/app/libs/
 
     - name: Build v2rayNG APK
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+        SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       run: |
         cd ${{ github.workspace }}/V2rayNG
+        echo $SIGNING_KEY | base64 -d > app/keystore/android_keystore.jks
         chmod 777 *
         sed -i 's/org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8/org.gradle.jvmargs=-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8/' ${{ github.workspace }}/V2rayNG/gradle.properties
-        ./gradlew assembleDebug
+        ./gradlew :app:assembleRelease -x test
 
-    - name: Upload v2rayNG APK
-      uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v3.1.1
       with:
-        name: v2rayNG
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/debug/
+        name: APKs
+        path: /home/runner/work/v2rayNG/v2rayNG/V2rayNG/app/build/outputs/apk/release/*.apk
+
+    - name: Upload apk to release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: v2rayNG_${{ github.event.inputs.V2RAYNG_VERSION }}_${{ github.event.inputs.XRAY_CORE_VERSION }}
+        tag_name: v${{ github.event.inputs.V2RAYNG_VERSION }}_${{ github.event.inputs.XRAY_CORE_VERSION }}
+        files: /home/runner/work/v2rayNG/v2rayNG/V2rayNG/app/build/outputs/apk/release/*.apk
