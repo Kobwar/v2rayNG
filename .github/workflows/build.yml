@@ -49,16 +49,21 @@ jobs:
         gomobile bind -v -androidapi 19 -ldflags='-s -w' ./
         cp *.aar ${{ github.workspace }}/V2rayNG/app/libs/
 
+    - name: Decode Keystore
+      id: decode_keystore
+      uses: timheuer/base64-to-file@v1.2
+      with:
+        fileName: 'android_keystore.jks'
+        fileDir: '/home/runner/work/v2rayNG/v2rayNG/V2rayNG/app/keystore/'
+        encodedString: ${{ secrets.SIGNING_KEY }}
+
     - name: Build v2rayNG APK
       env:
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
         SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       run: |
         cd ${{ github.workspace }}/V2rayNG
-        mkdir -p app/keystore
-        echo $SIGNING_KEY | base64 -d > app/keystore/android_keystore.jks
         chmod 777 *
         sed -i 's/org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8/org.gradle.jvmargs=-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8/' ${{ github.workspace }}/V2rayNG/gradle.properties
         ./gradlew :app:assembleRelease -x test
