@@ -1,36 +1,39 @@
-# v2rayNG
+# Build v2rayNG Android App
 
-A V2Ray client for Android, support [Xray core](https://github.com/XTLS/Xray-core) and [v2fly core](https://github.com/v2fly/v2ray-core)
+This repository provides GitHub Actions workflows to automate the build process of the v2rayNG Android app. You can use this setup to build the app with your own signing keys and credentials.
 
-[![API](https://img.shields.io/badge/API-21%2B-yellow.svg?style=flat)](https://developer.android.com/about/versions/lollipop)
-[![Kotlin Version](https://img.shields.io/badge/Kotlin-1.6.21-blue.svg)](https://kotlinlang.org)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/2dust/v2rayNG)](https://github.com/2dust/v2rayNG/commits/master)
-[![CodeFactor](https://www.codefactor.io/repository/github/2dust/v2rayng/badge)](https://www.codefactor.io/repository/github/2dust/v2rayng)
-[![GitHub Releases](https://img.shields.io/github/downloads/2dust/v2rayNG/latest/total?logo=github)](https://github.com/2dust/v2rayNG/releases)
-[![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/v2rayn)
+## Prerequisites
 
-<a href="https://play.google.com/store/apps/details?id=com.v2ray.ang">
-<img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="165" height="64" />
+Before you can build the v2rayNG Android app, You need to add the following **GitHub Secrets** to your repository:
+ - `SIGNING_KEY`: Your signing key (Keystore) in base64-encoded format.
+ - `SIGNING_KEY_ALIAS`: The alias for your signing key.
+ - `SIGNING_KEY_PASSWORD`: The password for your signing key.
+ - `SIGNING_STORE_PASSWORD`: The store password for your signing key.
+
+## Building the App
+
+To build the v2rayNG Android app, follow these steps:
+
+1. Fork this repository to your own GitHub account.
+
+2. Go to the "Settings" tab of your repository, and then click on "Secrets."
+
+3. Add the required secrets mentioned above with your signing key information.
+
+4. To trigger the GitHub Actions workflow manually, navigate to the "Actions" tab, select the workflow you want to run, and click the "Run workflow" button. This will initiate the build process.
+Additionally, please make sure to provide the input data for XRAY_CORE_VERSION and V2RAYNG_VERSION when running the workflow.
+   - `XRAY_CORE_VERSION`: The version of XRay Core to use for the build e.g `v1.8.4`.
+   - `V2RAYNG_VERSION`: The version of v2rayNG (you can pass anything you want , it's not important).
+5. Once the workflow completes, the built app will be uploaded to the GitHub Releases section of your repository. You can find it there and download the APK for installation on your Android device.
+
+## Contributing
+
+If you encounter any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request. Your contributions are welcome!
+
+For more information about the v2rayNG Android app, visit the [original repository](https://github.com/2dust/v2rayNG).
+
+Happy building!
+
+<a href="https://nowpayments.io/donation?api_key=MG750CX-D7AMMH9-QWARQ7V-9ZKH9XQ&source=lk_donation&medium=referral" target="_blank">
+  <img src="https://nowpayments.io/images/embeds/donation-button-black.svg" alt="Crypto donation button by NOWPayments">
 </a>
-
-### Telegram Channel
-[github_2dust](https://t.me/github_2dust)
-
-### Usage
-
-#### Geoip and Geosite
-- geoip.dat and geosite.dat files are in `Android/data/com.v2ray.ang/files/assets` (path may differ on some Android device)
-- download feature will get enhanced version in this [repo](https://github.com/Loyalsoldier/v2ray-rules-dat) (Note it need a working proxy)
-- latest official [domain list](https://github.com/v2fly/domain-list-community) and [ip list](https://github.com/v2fly/geoip) can be imported manually
-- possible to use third party dat file in the same folder, like [h2y](https://guide.v2fly.org/routing/sitedata.html#%E5%A4%96%E7%BD%AE%E7%9A%84%E5%9F%9F%E5%90%8D%E6%96%87%E4%BB%B6)
-
-### More in our [wiki](https://github.com/2dust/v2rayNG/wiki)
-
-### Development guide
-
-Android project under V2rayNG folder can be compiled directly in Android Studio, or using Gradle wrapper. But the v2ray core inside the aar is (probably) outdated.  
-The aar can be compiled from the Golang project [AndroidLibV2rayLite](https://github.com/2dust/AndroidLibV2rayLite) or [AndroidLibXrayLite](https://github.com/2dust/AndroidLibXrayLite).
-For a quick start, read guide for [Go Mobile](https://github.com/golang/go/wiki/Mobile) and [Makefiles for Go Developers](https://tutorialedge.net/golang/makefiles-for-go-developers/)
-
-v2rayNG can run on Android Emulators. For WSA, VPN permission need to be granted via
-`appops set [package name] ACTIVATE_VPN allow`
