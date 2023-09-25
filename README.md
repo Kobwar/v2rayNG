@@ -34,6 +34,10 @@ For more information about the v2rayNG Android app, visit the [original reposito
 
 Happy building!
 
+Thanks to:
+- [2dust](https://github.com/2dust/v2rayNG)
+- [Fangliding](https://github.com/Fangliding/v2rayNG)
+
 <a href="https://nowpayments.io/donation?api_key=MG750CX-D7AMMH9-QWARQ7V-9ZKH9XQ&source=lk_donation&medium=referral" target="_blank">
   <img src="https://nowpayments.io/images/embeds/donation-button-black.svg" alt="Crypto donation button by NOWPayments">
 </a>
